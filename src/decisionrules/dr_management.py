@@ -31,63 +31,62 @@ class ManagementApi():
             return "https://api.decisionrules.io/api"
 
 
-    async def get_call(self, get_url):
+    def get_call(self, get_url):
         response = None
 
-
-        response = await requests.get(get_url, headers=_header)
+        response = requests.get(get_url, headers=_header)
 
         return response.json()
         
 
-    async def get_rule(self, rule_id, version = None):
+    def get_rule(self, rule_id, version = None):
         url = None
         if version is not None:
             url = f"{self.url_factory()}/rule/{rule_id}/{version}"
         else:
             url = f"{self.url_factory()}/rule/{rule_id}"
 
-        return await self.get_call(url)
+        return self.get_call(url)
 
 
 
-    async def get_space(self, space_id):
+    def get_space(self, space_id):
         url = f"{self.url_factory()}/space/{space_id}"
 
-        return await self.get_call(url)
+        return self.get_call(url)
 
 
 
-    async def create_rule(self, space_id, data):
+    def create_rule(self, space_id, data):
         url = f"{self.url_factory()}/rule/{space_id}"
 
         response = None
 
         
-        response = await requests.post(url, json=data, headers=_header)
+        response = requests.post(url, json=data, headers=_header)
         return response.json()
 
 
-    async def update_rule(self, rule_id, version, data):
+    def update_rule(self, rule_id, version, data):
         url = f"{self.url_factory()}/rule/{rule_id}/{version}"
 
         response = None
 
         
-        response = await requests.put(url, json=data, headers=_header)
+        response = requests.put(url, json=data, headers=_header)
         return
         
 
-    async def delete_rule(self, rule_id, version):
+    def delete_rule(self, rule_id, version):
         url = f"{self.url_factory()}/rule/{rule_id}/{version}"
 
         response = None
 
-        await requests.delete(url, headers=_header)
+        requests.delete(url, headers=_header)
         return
 
 
-    async def get_ruleflow(self, ruleflow_id, version = None):
+    def get_ruleflow(self, ruleflow_id, version = None):
         url = None
         if version is not None:
             url = f"{self.url_factory()}/rule-flow/{ruleflow_id}/{version}"
@@ -96,28 +95,28 @@ class ManagementApi():
 
         print(url)
 
-        return await self.get_call(url)
+        return self.get_call(url)
 
 
-    async def create_ruleflow(self, data):
+    def create_ruleflow(self, data):
         url = f"{self.url_factory()}/rule-flow/"
 
         response = None
 
-        response = await  requests.post(url,json=data, headers=_header)
+        response = requests.post(url,json=data, headers=_header)
         return response.json()
 
 
-    async def update_ruleflow(self, ruleflow_id, version, data):
+    def update_ruleflow(self, ruleflow_id, version, data):
         url = f"{self.url_factory()}/rule-flow/{ruleflow_id}/{version}"
 
         response = None
 
-        response = await requests.put(url, json=data, headers=_header)
+        response = requests.put(url, json=data, headers=_header)
         return
 
 
-    async def delele_ruleflow(self, ruleflow_id, version = None):
+    def delele_ruleflow(self, ruleflow_id, version = None):
         if version is not None:
             url = f"{self.url_factory()}/rule-flow/{ruleflow_id}/{version}"
         else:
@@ -126,21 +125,21 @@ class ManagementApi():
 
         response = None
 
-        await requests.delete(url, headers=_header)
+        requests.delete(url, headers=_header)
         return
 
 
-    async def export_ruleflow(self, ruleflow_id, version = None):
+    def export_ruleflow(self, ruleflow_id, version = None):
         url = None
         if version is not None:
             url = f"{self.url_factory()}/rule-flow/export/{ruleflow_id}/{version}"
         else:
             url = f"{self.url_factory()}/rule-flow/export/{ruleflow_id}"
 
-        return await self.get_call(url)
+        return self.get_call(url)
 
 
-    async def import_ruleflow(self, data, ruleflow_id = None, current_version = None):
+    def import_ruleflow(self, data, ruleflow_id = None, current_version = None):
         url = None
         if ruleflow_id is None and current_version is None:
             url = f"{self.url_factory()}/rule-flow/import"
@@ -151,29 +150,29 @@ class ManagementApi():
 
         response = None
 
-        response = await requests.post(url=url, json=data, headers=_header)
+        response = requests.post(url=url, json=data, headers=_header)
 
         return response.json()
 
 
-    async def change_rule_status(self, ruleId, status, version):
+    def change_rule_status(self, ruleId, status, version):
         url = f"{self.url_factory()}/rule/status/{ruleId}/{status}/{version}"
 
-        response = await requests.put(url=url, headers=_header)
+        response = requests.put(url=url, headers=_header)
 
         return response.json()
 
-    async def getItems(self, tags):
+    def getItems(self, tags):
 
         tagsQuery = ",".join(map(str, tags))
 
         url = f"{self.url_factory()}/tags/items/?tags={tagsQuery}"
 
-        response = await requests.get(url)
+        response = requests.get(url)
 
         return response.json()
 
-    async def updateTags(self, ruleId, data, version=None):
+    def updateTags(self, ruleId, data, version=None):
         
         url = ""
 
@@ -182,11 +181,11 @@ class ManagementApi():
         else:
             url = f"{self.url_factory()}/tags/{ruleId}/{version}"
 
-        response = await requests.patch(url, data=data)
+        response = requests.patch(url, data=data)
 
         return response.json()
 
-    async def deleteTags(self, ruleId, version=None):
+    def deleteTags(self, ruleId, version=None):
 
         url = ""
 
@@ -195,6 +194,6 @@ class ManagementApi():
         else:
             url = f"{self.url_factory()}/tags/{ruleId}/{version}"
 
-        await requests.delete(url)
+        requests.delete(url)
 
         return

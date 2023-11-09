@@ -1,5 +1,6 @@
 from .enums import Protocols
 
+
 class CustomDomain:
     _custom_domain_url = None
     _custom_domain_protocol: Protocols = None

@@ -18,7 +18,7 @@ class SolverApi:
         _custom_domain = custom_domain
 
 
-    async def solve(self, solver_type, rule_id, input_data, solver_strategy, version=None):
+    def solve(self, solver_type, rule_id, input_data, solver_strategy, version=None):
         endpoint = self.url_factory(solver_type, rule_id, version)
 
         header = self.header_factory(_api_key, solver_strategy)

@@ -3,21 +3,12 @@ import requests
 from .custom_domain import *
 from .exceptions import *
 
-class ManagementApi():
-
-    _management_api: str
-    _custom_domain: CustomDomain
-
-    _header: dict
-    
+class ManagementApi():    
 
     def __init__(self, management_api_key, custom_domain: CustomDomain = None):
-        global _management_api
-        _management_api = management_api_key
-        global _custom_domain
-        _custom_domain = custom_domain
-        global _header
-        _header = self.header_factory(_management_api)
+        self._management_api = management_api_key
+        self._custom_domain = custom_domain
+        self._header = self.header_factory(self._management_api)
 
 
     def header_factory(self, api_key):
@@ -25,8 +16,8 @@ class ManagementApi():
 
 
     def url_factory(self):
-        if _custom_domain is not None:
-            return f"{_custom_domain.custom_domain_protocol.value}://{_custom_domain.custom_domain_url}/api"
+        if self._custom_domain is not None:
+            return f"{self._custom_domain.custom_domain_protocol.value}://{self._custom_domain.custom_domain_url}/api"
         else:
             return "https://api.decisionrules.io/api"
 
@@ -34,7 +25,7 @@ class ManagementApi():
     def get_call(self, get_url):
         response = None
 
-        response = requests.get(get_url, headers=_header)
+        response = requests.get(get_url, headers=self._header)
 
         return response.json()
         
@@ -51,7 +42,7 @@ class ManagementApi():
 
 
     def get_space(self, space_id):
-        url = f"{self.url_factory()}/space/{space_id}"
+        url = f"{self.url_factory()}/space/items"
 
         return self.get_call(url)
 
@@ -63,7 +54,7 @@ class ManagementApi():
         response = None
 
         
-        response = requests.post(url, json=data, headers=_header)
+        response = requests.post(url, json=data, headers=self._header)
         return response.json()
 
 
@@ -73,7 +64,7 @@ class ManagementApi():
         response = None
 
         
-        response = requests.put(url, json=data, headers=_header)
+        response = requests.put(url, json=data, headers=self._header)
         return
         
 
@@ -82,16 +73,16 @@ class ManagementApi():
 
         response = None
 
-        requests.delete(url, headers=_header)
+        requests.delete(url, headers=self._header)
         return
 
 
     def get_ruleflow(self, ruleflow_id, version = None):
         url = None
         if version is not None:
-            url = f"{self.url_factory()}/rule-flow/{ruleflow_id}/{version}"
+            url = f"{self.url_factory()}/rule-flow/export/{ruleflow_id}/{version}"
         else:
-            url = f"{self.url_factory()}/rule-flow/{ruleflow_id}"
+            url = f"{self.url_factory()}/rule-flow/export/{ruleflow_id}"
 
         print(url)
 
@@ -99,11 +90,10 @@ class ManagementApi():
 
 
     def create_ruleflow(self, data):
-        url = f"{self.url_factory()}/rule-flow/"
+        url = f"{self.url_factory()}/rule-flow/import"
 
         response = None
-
-        response = requests.post(url,json=data, headers=_header)
+        response = requests.post(url,json=data, headers=self._header)
         return response.json()
 
 
@@ -112,7 +102,7 @@ class ManagementApi():
 
         response = None
 
-        response = requests.put(url, json=data, headers=_header)
+        response = requests.put(url, json=data, headers=self._header)
         return
 
 
@@ -125,7 +115,7 @@ class ManagementApi():
 
         response = None
 
-        requests.delete(url, headers=_header)
+        requests.delete(url, headers=self._header)
         return
 
 
@@ -150,7 +140,7 @@ class ManagementApi():
 
         response = None
 
-        response = requests.post(url=url, json=data, headers=_header)
+        response = requests.post(url=url, json=data, headers=self._header)
 
         return response.json()
 
@@ -158,7 +148,7 @@ class ManagementApi():
     def change_rule_status(self, ruleId, status, version):
         url = f"{self.url_factory()}/rule/status/{ruleId}/{status}/{version}"
 
-        response = requests.put(url=url, headers=_header)
+        response = requests.put(url=url, headers=self._header)
 
         return response.json()
 

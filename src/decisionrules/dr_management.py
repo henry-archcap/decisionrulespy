@@ -96,6 +96,12 @@ class ManagementApi():
         response = requests.post(url,json=data, headers=self._header)
         return response.json()
 
+    def deprecated_create_ruleflow(self, data):
+        url = f"{self.url_factory()}/rule-flow"
+
+        response = None
+        response = requests.post(url,json=data, headers=self._header)
+        return response.json()
 
     def update_ruleflow(self, ruleflow_id, version, data):
         url = f"{self.url_factory()}/rule-flow/{ruleflow_id}/{version}"

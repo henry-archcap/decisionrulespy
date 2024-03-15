@@ -5,23 +5,15 @@ from .enums import *
 from .custom_domain import *
 
 class SolverApi:
-
-    _api_key: str
-    _custom_domain: CustomDomain
-
-    
-
     def __init__(self, api_key, custom_domain: CustomDomain = None):
-        global _api_key
-        _api_key = api_key
-        global _custom_domain
-        _custom_domain = custom_domain
+        self._api_key = api_key
+        self._custom_domain = custom_domain
 
 
     def solve(self, solver_type, rule_id, input_data, solver_strategy, version=None):
         endpoint = self.url_factory(solver_type, rule_id, version)
 
-        header = self.header_factory(_api_key, solver_strategy)
+        header = self.header_factory(self._api_key, solver_strategy)
 
         response = None
 
@@ -50,8 +42,8 @@ class SolverApi:
 
     def url_factory(self, solver_type, rule_id, version):
 
-        if _custom_domain is not None:
-            url = f"{_custom_domain.custom_domain_protocol.value}://{_custom_domain.custom_domain_url}/{solver_type.value}/solve/"
+        if self._custom_domain is not None:
+            url = f"{self._custom_domain.custom_domain_protocol.value}://{self._custom_domain.custom_domain_url}/{solver_type.value}/solve/"
         else:
             url = f"https://api.decisionrules.io/{solver_type.value}/solve/"
 
@@ -75,7 +67,7 @@ class SolverApi:
 
 
     def header_factory(self, api_key, strategy):
-        if strategy is not SolverStrategies.STANDARD:
+        if strategy is SolverStrategies.STANDARD:
             return {"Authorization": f"Bearer {api_key}"}
         else:
             return {"Authorization": f"Bearer {api_key}", "X-Strategy": strategy.value}
